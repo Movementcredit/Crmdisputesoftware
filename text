@@ -1,0 +1,9 @@
+movement-credit-ai/
+├── requirements.txt
+├── README.md
+├── main.py
+└── sample_files/
+    ├── sample_report.pdf
+    ├── id_front.jpg
+    ├── id_back.jpg
+    └── utility_bill.pdf
