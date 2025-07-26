@@ -1,0 +1,54 @@
+# Use official Python image
+FROM python:3.10-slim-bullseye
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV WKHTMLTOPDF_VERSION 0.12.6
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    libxrender-dev \
+    libx11-dev \
+    libxext-dev \
+    libfontconfig1-dev \
+    libfreetype6-dev \
+    fontconfig \
+    tesseract-ocr \
+    tesseract-ocr-eng \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install wkhtmltopdf
+RUN wget https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}-1/wkhtmltox_${WKHTMLTOPDF_VERSION}-1.buster_amd64.deb \
+    && dpkg -i wkhtmltox_${WKHTMLTOPDF_VERSION}-1.buster_amd64.deb \
+    && rm wkhtmltox_${WKHTMLTOPDF_VERSION}-1.buster_amd64.deb
+
+# Set work directory
+WORKDIR /app
+
+# Copy requirements and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY . .
+
+# Create necessary directories
+RUN mkdir -p /app/templates \
+    && mkdir -p /app/output
+
+# Set environment variables for configuration
+ENV USER_FULL_NAME="Mandy Nickole Salas"
+ENV USER_DOB="01/01/1985"
+ENV USER_ADDRESS="510 W Chase St, Pensacola, FL 32502"
+ENV USER_SSN_LAST4="1234"
+ENV COMPANY_NAME="Movement Credit AI"
+ENV COMPANY_SLOGAN="We combine legal precision with automated forensic reporting"
+ENV COMPANY_EMAIL="support@movementcredit.ai"
+
+# Set entrypoint command
+CMD ["python", "main.py"]
