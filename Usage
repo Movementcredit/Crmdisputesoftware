@@ -1,0 +1,9 @@
+from main import CreditRepairSystem
+
+system = CreditRepairSystem()
+system.process_upload(
+    credit_report_pdf="path/to/report.pdf",
+    id_front="path/to/id_front.jpg",
+    id_back="path/to/id_back.jpg",
+    utility_bill="path/to/utility_bill.pdf"
+)
